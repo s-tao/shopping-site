@@ -104,19 +104,24 @@ def add_to_cart(melon_id):
         session["cart"] = {}
 
     shopping_cart = session["cart"]
-    # meloon = shopping_cart.get(melon_id)
+
     shopping_cart[melon_id] = shopping_cart.get(melon_id, 0) + 1
 
     melon = melons.get_by_id(melon_id)
 
-    total = shopping_cart[melon_id] * melon.price
+    melons_list = []
+
+
+    for mel_id in shopping_cart:
+        melons_list.append(melons.get_by_id(mel_id))
+
+    # print(melons_list)
+    
+    # print(shopping_cart)
 
     flash(f"{melon.common_name} added to cart")
 
-    
-
-    return render_template("cart.html", shopping_cart=shopping_cart, name=melon.common_name,
-                            quantity=shopping_cart[melon_id], price=melon.price, total=total)
+    return render_template("cart.html", shopping_cart=shopping_cart, melons_list=melons_list)
 
 
 @app.route("/login", methods=["GET"])
